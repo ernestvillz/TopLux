@@ -66,6 +66,13 @@
                 Log in / Sign up
             </button>
             <button
+                class="outline-btn hidden"
+                data-auth-logout
+                type="button"
+            >
+                Log out
+            </button>
+            <button
                 class="outline-btn"
                 data-scroll="#contact"
             >
@@ -196,7 +203,7 @@
                     class="inventory-count"
                     id="inventoryCount"
                 >
-                    06 vehicles
+                    09 vehicles
                 </span>
             </div>
 
@@ -238,7 +245,7 @@
                     class="car-card"
                     role="button"
                     tabindex="0"
-                    data-category="grand touring"
+                    data-category="sports"
                 >
                     <div class="car-image">
                        <img
@@ -268,7 +275,7 @@
                     class="car-card"
                     role="button"
                     tabindex="0"
-                    data-category="grand touring"
+                    data-category="sports"
                 >
                     <div class="car-image">
                         <img
@@ -298,7 +305,7 @@
                     class="car-card"
                     role="button"
                     tabindex="0"
-                    data-category="grand touring"
+                    data-category="sports"
                 >
                     <div class="car-image">
                         <img
@@ -362,7 +369,7 @@
                 >
                     <div class="car-image">
                         <img
-                            src="assets/showroom-white.jpg"
+                            src="assets/lamborghini.jpg"
                             alt="White luxury sports car displayed in a showroom"
                         />
                         <span class="car-number">
@@ -372,17 +379,108 @@
                     <div class="car-meta">
                         <div>
                             <h3>
-                                Porsche Cayenne Turbo GT
+                                Lamborghini Revuelto
                             </h3>
                             <p>
-                                2022 · Chalk · 9,100 km
+                                2026 · Sports car · 1,500 km
                             </p>
                         </div>
                         <strong>
-                            ₱13.2M
+                            ₱46.3M
                         </strong>
                     </div>
                 </article>
+                <!-- Vehicle 07 -->
+                <article
+                    class="car-card"
+                    role="button"
+                    tabindex="0"
+                    data-category="suv"
+                >
+                    <div class="car-image">
+                        <img
+                            src="assets/cad2.jpg"
+                            alt="Black luxury Suv"
+                        />
+                        <span class="car-number">
+                            07
+                        </span>
+                    </div>
+                    <div class="car-meta">
+                        <div>
+                            <h3>
+                                Cadillac Escalade Black Edition
+                            </h3>
+                            <p>
+                                2025 · Suv · 13,117 km
+                            </p>
+                        </div>
+                        <strong>
+                            ₱11.3M
+                        </strong>
+                    </div>
+                </article>
+                <!-- Vehicle 08 -->
+                <article
+                    class="car-card"
+                    role="button"
+                    tabindex="0"
+                    data-category="grand touring"
+                >
+                    <div class="car-image">
+                        <img
+                            src="assets/nissan-gtr.jpg"
+                            alt="Japanise sports car"
+                        />
+                        <span class="car-number">
+                            08
+                        </span>
+                    </div>
+                    <div class="car-meta">
+                        <div>
+                            <h3>
+                                Nissan Gtr Nismo Red-Liner Edition
+                            </h3>
+                            <p>
+                                2024 · Ltd · 9,540 km
+                            </p>
+                        </div>
+                        <strong>
+                            ₱12.5M
+                        </strong>
+                    </div>
+                </article>
+                <!-- Vehicle 09 -->
+                <article
+                    class="car-card"
+                    role="button"
+                    tabindex="0"
+                    data-category="sports"
+                >
+                    <div class="car-image">
+                        <img
+                            src="assets/koenigsegg.jpg"
+                            alt="White luxury sports car displayed in a showroom"
+                        />
+                        <span class="car-number">
+                            09
+                        </span>
+                    </div>
+                    <div class="car-meta">
+                        <div>
+                            <h3>
+                                Koenigsegg Jesko
+                            </h3>
+                            <p>
+                                2024 · Hypercar · 4,295 km
+                            </p>
+                        </div>
+                        <strong>
+                            ₱212.5M
+                        </strong>
+                    </div>
+                </article>
+
             </div>
 
             <!-- Collection Footer -->
@@ -1092,6 +1190,7 @@
             auth,
             createAccount,
             signIn,
+            signOut,
             onAuthStateChanged,
             createReservation
         } from "./backend.js";
@@ -1516,9 +1615,22 @@
             });
         }
 
+        // Log out
+        document.querySelector('[data-auth-logout]').addEventListener('click', async () => {
+            try {
+                await signOut();
+                pendingBooking = null;
+            } catch (error) {
+                console.error(error);
+            }
+        });
+
         // Keep account state available to the interface.
         onAuthStateChanged(auth, (user) => {
             const authButton = document.querySelector('[data-auth-open]');
+
+            document.querySelector('[data-auth-logout]')
+                .classList.toggle('hidden', !user);
 
             if (user) {
                 authButton.textContent = 'Account';
